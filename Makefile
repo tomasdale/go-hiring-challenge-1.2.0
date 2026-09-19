@@ -15,3 +15,9 @@ docker-up ::
 
 docker-down ::
 	docker compose down
+
+pdc ::
+	podman compose up -d
+
+pdd ::
+	podman compose down

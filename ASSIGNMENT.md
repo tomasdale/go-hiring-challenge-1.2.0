@@ -26,15 +26,15 @@ Writing Idiomatic Go code is crucial, so we will focus on clarity and simplicity
 
 4. Update the catalog handler and relevant repositories to support offset pagination.
 
-   - The endpoint should accept query parameters `offset` and `limit`.
-   - If `offset` is not provided, default to 0.
-   - If `limit` is not provided, default to 10. Maximum limit should be 100. Minimum limit should be 1.
+   - The endpoint should accept query parameters `offset` and `limit`. ok
+   - If `offset` is not provided, default to 0. ok 
+   - If `limit` is not provided, default to 10. Maximum limit should be 100. Minimum limit should be 1. ok
    - The response should include the total number of products available.
 
 5. Update the catalog handler to support filtering products by:
 
-   - Category
-   - Price Less Than
+   - Category ok
+   - Price Less Than ok
 
 ### Product details endpoint
 

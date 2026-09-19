@@ -26,6 +26,17 @@ func TestOKResponse(t *testing.T) {
 		expected := `{"message":"Success"}`
 		assert.JSONEq(t, expected, recorder.Body.String(), "Response body does not match expected")
 	})
+
+	t.Run("Force encode error", func(t *testing.T) {
+		recorder := httptest.NewRecorder()
+		OKResponse(recorder, make(chan int))
+
+		assert.Equal(t, http.StatusInternalServerError, recorder.Code, "Expected status code 500 Internal Server Error")
+		assert.Equal(t, "application/json", recorder.Header().Get("Content-Type"), "Expected Content-Type to be application/json")
+
+		expected := `{"error":"Failed to encode response"}`
+		assert.JSONEq(t, expected, recorder.Body.String(), "Response body does not match expected")
+	})
 }
 
 func TestErrorResponse(t *testing.T) {
