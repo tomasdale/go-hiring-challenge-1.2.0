@@ -9,6 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	CATEGORY_TABLE = "Category"
+	VARIANTS_TABLE = "Variants"
+	OVERRIDE_PRICE = "COALESCE(product_variants.price, products.price) AS price"
+)
+
 type ProductsRepository struct {
 	db *gorm.DB
 }
@@ -22,7 +28,10 @@ func NewProductsRepository(db *gorm.DB) *ProductsRepository {
 func (r *ProductsRepository) List(ctx context.Context, data input.QueryData) ([]models.Product, error) {
 	var query *gorm.DB
 
-	query = r.db.WithContext(ctx).Model(&models.Product{}).Preload("Variants").Preload("category")
+	query = r.db.WithContext(ctx).
+		Model(&models.Product{}).
+		Preload(VARIANTS_TABLE, variantsWithEffectivePrice()).
+		Preload(CATEGORY_TABLE)
 	query = withCategory(query, data.Category)
 	query = withPriceLimit(query, data.PriceLessThan)
 
@@ -31,6 +40,25 @@ func (r *ProductsRepository) List(ctx context.Context, data input.QueryData) ([]
 		return nil, err
 	}
 	return products, nil
+}
+
+func (r *ProductsRepository) Details(ctx context.Context, query input.QueryData) (models.Product, error) {
+	if query.Code == "" {
+		return models.Product{}, gorm.ErrRecordNotFound
+	}
+
+	var product models.Product
+
+	if err := r.db.WithContext(ctx).
+		Joins(CATEGORY_TABLE).
+		Preload(VARIANTS_TABLE, variantsWithEffectivePrice()).
+		Where("products.code = ?", query.Code).
+		First(&product).Error; err != nil {
+
+		return models.Product{}, err
+	}
+
+	return product, nil
 }
 
 func withCategory(query *gorm.DB, category string) *gorm.DB {
@@ -48,27 +76,13 @@ func withPriceLimit(query *gorm.DB, priceLimit decimal.Decimal) *gorm.DB {
 	return query.Where("products.price < ?", priceLimit)
 }
 
-func (r *ProductsRepository) Details(ctx context.Context, query input.QueryData) (models.Product, error) {
-	if query.Code == "" {
-		return models.Product{}, gorm.ErrRecordNotFound
+func variantsWithEffectivePrice() func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Select(variantsWithEffectivePriceSelect()).
+			Joins("JOIN products ON products.id = product_variants.product_id")
 	}
+}
 
-	var product models.Product
-	variantsWithEffectivePrice := func(db *gorm.DB) *gorm.DB {
-		return db.Select(
-			"product_variants.id, product_variants.product_id, product_variants.name, product_variants.sku, " +
-				"COALESCE(product_variants.price, products.price) AS price",
-		).Joins("JOIN products ON products.id = product_variants.product_id")
-	}
-
-	if err := r.db.WithContext(ctx).
-		Joins("Category").
-		Preload("Variants", variantsWithEffectivePrice).
-		Where("products.code = ?", query.Code).
-		First(&product).Error; err != nil {
-
-		return models.Product{}, err
-	}
-
-	return product, nil
+func variantsWithEffectivePriceSelect() string {
+	return "product_variants.id, product_variants.product_id, product_variants.name, product_variants.sku, " + OVERRIDE_PRICE
 }
