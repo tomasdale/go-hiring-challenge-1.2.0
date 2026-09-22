@@ -22,7 +22,7 @@ func NewProductsRepository(db *gorm.DB) *ProductsRepository {
 func (r *ProductsRepository) List(ctx context.Context, data input.QueryData) ([]models.Product, error) {
 	var query *gorm.DB
 
-	query = r.db.WithContext(ctx).Model(&models.Product{}).Preload("Variants")
+	query = r.db.WithContext(ctx).Model(&models.Product{}).Preload("Variants").Preload("category")
 	query = withCategory(query, data.Category)
 	query = withPriceLimit(query, data.PriceLessThan)
 

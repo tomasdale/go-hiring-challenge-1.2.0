@@ -19,18 +19,14 @@ var (
 )
 
 type CatalogHandler struct {
-	usecase *usecase.GetProductsUseCase
-	logger  logger.Logger
+	products *usecase.GetProductsUseCase
+	logger   logger.Logger
 }
 
-func NewCatalogHandler(uc *usecase.GetProductsUseCase, lg logger.Logger) *CatalogHandler {
-	if lg == nil {
-		lg = logger.NewNopLogger()
-	}
-
+func NewCatalogHandler(products *usecase.GetProductsUseCase, l logger.Logger) *CatalogHandler {
 	return &CatalogHandler{
-		usecase: uc,
-		logger:  lg,
+		products: products,
+		logger:   l,
 	}
 }
 
@@ -52,15 +48,15 @@ func (h *CatalogHandler) GetAllProducts(w http.ResponseWriter, r *http.Request) 
 		PriceLessThan: priceFilter,
 	}
 
-	result, err := h.usecase.List(ctx, queryData)
+	result, err := h.products.List(ctx, queryData)
 	if err != nil {
 		h.logger.Error("failed to list products", zap.String("offset", strconv.Itoa(queryData.Offset)), zap.String("limit", strconv.Itoa(queryData.Limit)), zap.Error(err))
-		api.ErrorResponse(w, err.Code(), err.Error())
+		api.ErrorResponseFromError(w, err)
 		return
 	}
 
 	if len(result.Products) == 0 {
-		api.ErrorResponse(w, http.StatusNotFound, "No products found")
+		api.ErrorResponse(w, http.StatusNotFound, "no products found")
 		return
 	}
 
@@ -68,6 +64,7 @@ func (h *CatalogHandler) GetAllProducts(w http.ResponseWriter, r *http.Request) 
 }
 
 func numberWithDefault(s string, defaultValue int) int {
+	s = strings.TrimSpace(s)
 	if s == "" {
 		return defaultValue
 	}
@@ -92,14 +89,14 @@ func (h *CatalogHandler) GetProductByCode(w http.ResponseWriter, r *http.Request
 	}
 
 	if code == "" {
-		api.ErrorResponse(w, http.StatusBadRequest, "Product code is required")
+		api.ErrorResponse(w, http.StatusBadRequest, "product code is required")
 		return
 	}
 
-	result, err := h.usecase.Details(ctx, input.QueryData{Code: code})
+	result, err := h.products.Details(ctx, input.QueryData{Code: code})
 	if err != nil {
 		h.logger.Error("failed to get product by code", zap.String("code", code), zap.Error(err))
-		api.ErrorResponse(w, http.StatusNotFound, "Product not found")
+		api.ErrorResponseFromError(w, err)
 		return
 	}
 

@@ -48,12 +48,18 @@ func main() {
 	prodRepo := database.NewProductsRepository(db)
 	uc := usecase.NewProductsUseCase(prodRepo, presenter.NewProductsPresenter())
 	catalog := controllers.NewCatalogHandler(uc, appLogger)
+	categoryRepo := database.NewCategoriesRepository(db)
+	categoryUseCase := usecase.NewCategoriesUseCase(categoryRepo, presenter.NewCategoriesPresenter())
+	categories := controllers.NewCategoriesHandler(categoryUseCase, appLogger)
 
 	// Set up routing
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /catalog", catalog.GetAllProducts)
 	mux.HandleFunc("GET /catalog/{code}", catalog.GetProductByCode)
-	mux.HandleFunc("GET /categories", catalog.GetAllProducts)
+
+	mux.HandleFunc("GET /categories", categories.GetAllCategories)
+	mux.HandleFunc("GET /categories/{code}", categories.GetCategoryByCode)
+	mux.HandleFunc("POST /categories", categories.CreateCategory)
 
 	// Set up the HTTP server
 	srv := &http.Server{

@@ -15,6 +15,7 @@ import (
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"gorm.io/gorm"
 )
 
 func TestNumberWithDefault(t *testing.T) {
@@ -29,14 +30,26 @@ func TestNumberWithDefault(t *testing.T) {
 	t.Run("returns parsed value when valid", func(t *testing.T) {
 		assert.Equal(t, 25, numberWithDefault("25", 10))
 	})
+
+	t.Run("preserves zero when explicitly provided", func(t *testing.T) {
+		assert.Equal(t, 0, numberWithDefault("0", 10))
+	})
 }
 
 func TestCatalogHandler_GetAllProducts(t *testing.T) {
 	t.Run("uses default offset and limit when query is empty", func(t *testing.T) {
 		repo := new(mocks.ProductsRepository)
-		products := []models.Product{{Code: "PRD-001", Price: decimal.RequireFromString("99.90")}}
+		products := []models.Product{{
+			Code:     "PRD-001",
+			Price:    decimal.RequireFromString("99.90"),
+			Category: models.Category{Code: "1", Name: "Clothing"},
+		}}
 		expectedResponse := output.GetAllProductsResponse{
-			Products: []output.ProductSummary{{Code: "PRD-001", Price: 99.9}},
+			Products: []output.Product{{
+				Code:     "PRD-001",
+				Price:    99.9,
+				Category: output.Category{Code: "1", Name: "Clothing"},
+			}},
 		}
 
 		repo.On("List", mock.Anything, mock.MatchedBy(func(query input.QueryData) bool {
@@ -53,19 +66,30 @@ func TestCatalogHandler_GetAllProducts(t *testing.T) {
 		h.GetAllProducts(res, req)
 
 		assert.Equal(t, http.StatusOK, res.Code)
-		assert.JSONEq(t, `{"products":[{"code":"PRD-001","price":99.9}]}`, res.Body.String())
+		assert.JSONEq(t, `{"products":[{"code":"PRD-001","price":99.9,"category":{"code":"1","name":"Clothing"}}]}`, res.Body.String())
 		repo.AssertExpectations(t)
 		presenter.AssertExpectations(t)
 	})
 
 	t.Run("uses provided offset and limit values from query string", func(t *testing.T) {
 		repo := new(mocks.ProductsRepository)
+		products := []models.Product{{
+			Code:     "PRD-001",
+			Price:    decimal.RequireFromString("99.90"),
+			Category: models.Category{Code: "1", Name: "Clothing"},
+		}}
 		repo.On("List", mock.Anything, mock.MatchedBy(func(query input.QueryData) bool {
 			return query.Offset == 3 && query.Limit == 20
-		})).Return([]models.Product{}, nil).Once()
+		})).Return(products, nil).Once()
 
 		presenter := new(mocks.ProductsPresenter)
-		presenter.On("ProductListResponse", mock.Anything, []models.Product{}).Return(output.GetAllProductsResponse{Products: []output.ProductSummary{}}).Once()
+		presenter.On("ProductListResponse", mock.Anything, products).Return(output.GetAllProductsResponse{
+			Products: []output.Product{{
+				Code:     "PRD-001",
+				Price:    99.9,
+				Category: output.Category{Code: "1", Name: "Clothing"},
+			}},
+		}).Once()
 
 		h := NewCatalogHandler(usecase.NewProductsUseCase(repo, presenter), logger.NewNopLogger())
 		req := httptest.NewRequest(http.MethodGet, "/products?offset=3&limit=20", nil)
@@ -74,7 +98,7 @@ func TestCatalogHandler_GetAllProducts(t *testing.T) {
 		h.GetAllProducts(res, req)
 
 		assert.Equal(t, http.StatusOK, res.Code)
-		assert.JSONEq(t, `{"products":[]}`, res.Body.String())
+		assert.JSONEq(t, `{"products":[{"code":"PRD-001","price":99.9,"category":{"code":"1","name":"Clothing"}}]}`, res.Body.String())
 		repo.AssertExpectations(t)
 		presenter.AssertExpectations(t)
 	})
@@ -91,8 +115,8 @@ func TestCatalogHandler_GetAllProducts(t *testing.T) {
 
 		h.GetAllProducts(res, req)
 
-		assert.Equal(t, http.StatusNotFound, res.Code)
-		assert.JSONEq(t, `{"error":"Product not found"}`, res.Body.String())
+		assert.Equal(t, http.StatusInternalServerError, res.Code)
+		assert.JSONEq(t, `{"error":"Error fetching products"}`, res.Body.String())
 		presenter.AssertNotCalled(t, "ProductListResponse", mock.Anything, mock.Anything)
 		repo.AssertExpectations(t)
 	})
@@ -113,7 +137,7 @@ func TestCatalogHandler_GetProductByCode(t *testing.T) {
 
 		presenter := new(mocks.ProductsPresenter)
 		presenter.On("ProductDetailsResponse", mock.Anything, product).Return(output.GetByProductCodeResponse{
-			Product: output.ProductDetails{
+			Product: output.Product{
 				Code:  product.Code,
 				Price: product.Price.InexactFloat64(),
 				Category: output.Category{
@@ -138,7 +162,7 @@ func TestCatalogHandler_GetProductByCode(t *testing.T) {
 
 	t.Run("returns not found when details query fails", func(t *testing.T) {
 		repo := new(mocks.ProductsRepository)
-		repo.On("Details", mock.Anything, mock.Anything).Return(models.Product{}, errors.New("product not found")).Once()
+		repo.On("Details", mock.Anything, mock.Anything).Return(models.Product{}, gorm.ErrRecordNotFound).Once()
 
 		presenter := new(mocks.ProductsPresenter)
 
@@ -149,7 +173,7 @@ func TestCatalogHandler_GetProductByCode(t *testing.T) {
 		h.GetProductByCode(res, req)
 
 		assert.Equal(t, http.StatusNotFound, res.Code)
-		assert.JSONEq(t, `{"error":"Product not found"}`, res.Body.String())
+		assert.JSONEq(t, `{"error":"product not found"}`, res.Body.String())
 		presenter.AssertNotCalled(t, "ProductDetailsResponse", mock.Anything, mock.Anything)
 		repo.AssertExpectations(t)
 	})

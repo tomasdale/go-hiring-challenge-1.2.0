@@ -17,11 +17,26 @@ func NewProductsPresenter() *ProductsPresenter {
 func (d *ProductsPresenter) ProductListResponse(ctx context.Context, i []models.Product) output.GetAllProductsResponse {
 	input := i
 
-	products := make([]output.ProductSummary, len(input))
+	products := make([]output.Product, len(input))
 	for i, p := range input {
-		products[i] = output.ProductSummary{
+		products[i] = output.Product{
 			Code:  p.Code,
 			Price: p.Price.InexactFloat64(),
+			Category: output.Category{
+				Code: p.Category.Code,
+				Name: p.Category.Name,
+			},
+			Variants: func() []output.Variant {
+				variants := make([]output.Variant, len(p.Variants))
+				for i, v := range p.Variants {
+					variants[i] = output.Variant{
+						Name:  v.Name,
+						SKU:   v.SKU,
+						Price: v.Price.InexactFloat64(),
+					}
+				}
+				return variants
+			}(),
 		}
 	}
 
@@ -42,7 +57,7 @@ func (d *ProductsPresenter) ProductDetailsResponse(ctx context.Context, product 
 	}
 
 	return output.GetByProductCodeResponse{
-		Product: output.ProductDetails{
+		Product: output.Product{
 			Code:  product.Code,
 			Price: product.Price.InexactFloat64(),
 			Category: output.Category{
