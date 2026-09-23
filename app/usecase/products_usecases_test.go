@@ -16,7 +16,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func TestGetProductsUseCase_List(t *testing.T) {
+func TestProductsUseCase_List(t *testing.T) {
 	tests := []struct {
 		name          string
 		query         input.QueryData
@@ -82,7 +82,7 @@ func TestGetProductsUseCase_List(t *testing.T) {
 	}
 }
 
-func TestGetProductsUseCase_Details(t *testing.T) {
+func TestProductsUseCase_Details(t *testing.T) {
 	tests := []struct {
 		name          string
 		repositoryErr error
