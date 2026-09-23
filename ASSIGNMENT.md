@@ -46,18 +46,18 @@ Writing Idiomatic Go code is crucial, so we will focus on clarity and simplicity
 
 ### Categories endpoint
 
-1. Implement the categories endpoint at `/categories`. 
+1. Implement the categories endpoint at `/categories`.  ok
 
 - This endpoint should return a list of all categories.
 - Provide unit tests for this endpoint.
 
-2. Implement an endpoint to create new categories at `/categories`.
+2. Implement an endpoint to create new categories at `/categories`. ok
 
 - This endpoint should accept a JSON body with the category details from the category model and create a new entry in the DB.
 - Provide unit tests for this endpoint.
 
 ### Testing
 
-1. Provide unit tests for `app/catalog/handler.go`. Make sure to cover the new features implemented in the catalog endpoint.
+1. Provide unit tests for `app/catalog/handler.go`. Make sure to cover the new features implemented in the catalog endpoint. ok
 
-2. Implement the functions in `app/api/response.go` to satisfy the provided unit tests and refactor all handlers to use these functions where appropriate.
+2. Implement the functions in `app/api/response.go` to satisfy the provided unit tests and refactor all handlers to use these functions where appropriate. ok

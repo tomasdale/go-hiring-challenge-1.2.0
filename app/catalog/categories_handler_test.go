@@ -104,7 +104,7 @@ func TestCategoriesHandler_GetCategoryByCode(t *testing.T) {
 func TestCategoriesHandler_CreateCategory(t *testing.T) {
 	t.Run("creates category from JSON body", func(t *testing.T) {
 		repo := new(mocks.CategoriesRepository)
-		category := models.Category{Code: "CAT-001", Name: "Shoes"}
+		category := input.Category{Code: "CAT-001", Name: "Shoes"}
 		repo.On("Create", mock.Anything, category).Return(nil).Once()
 
 		h := NewCategoriesHandler(usecase.NewCategoriesUseCase(repo, new(mocks.CategoriesPresenter)), logger.NewNopLogger())

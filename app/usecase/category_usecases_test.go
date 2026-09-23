@@ -89,7 +89,7 @@ func TestCategoriesUseCase_Create(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			repo := new(mocks.CategoriesRepository)
 			if test.category.Code != "" && test.category.Name != "" {
-				repo.On("Create", mock.Anything, models.Category{Code: test.category.Code, Name: test.category.Name}).Return(test.repositoryErr).Once()
+				repo.On("Create", mock.Anything, input.Category{Code: test.category.Code, Name: test.category.Name}).Return(test.repositoryErr).Once()
 			}
 
 			err := NewCategoriesUseCase(repo, new(mocks.CategoriesPresenter)).Create(context.Background(), test.category)

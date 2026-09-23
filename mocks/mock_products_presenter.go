@@ -5,23 +5,25 @@ import (
 
 	"github.com/mytheresa/go-hiring-challenge/app/ports/output"
 	"github.com/mytheresa/go-hiring-challenge/models"
+	"github.com/stretchr/testify/mock"
 )
 
-type stubProductsPresenter struct {
-	listFn    func(ctx context.Context, products []models.Product) output.GetAllProductsResponse
-	detailsFn func(ctx context.Context, product models.Product) output.GetByProductCodeResponse
+type ProductsPresenter struct {
+	mock.Mock
 }
 
-func (s *stubProductsPresenter) ProductListResponse(ctx context.Context, products []models.Product) output.GetAllProductsResponse {
-	if s.listFn != nil {
-		return s.listFn(ctx, products)
+func (m *ProductsPresenter) ProductListResponse(ctx context.Context, products []models.Product) output.GetAllProductsResponse {
+	args := m.Called(ctx, products)
+	if args.Get(0) == nil {
+		return output.GetAllProductsResponse{}
 	}
-	return output.GetAllProductsResponse{}
+	return args.Get(0).(output.GetAllProductsResponse)
 }
 
-func (s *stubProductsPresenter) ProductDetailsResponse(ctx context.Context, product models.Product) output.GetByProductCodeResponse {
-	if s.detailsFn != nil {
-		return s.detailsFn(ctx, product)
+func (m *ProductsPresenter) ProductDetailsResponse(ctx context.Context, product models.Product) output.GetByProductCodeResponse {
+	args := m.Called(ctx, product)
+	if args.Get(0) == nil {
+		return output.GetByProductCodeResponse{}
 	}
-	return output.GetByProductCodeResponse{}
+	return args.Get(0).(output.GetByProductCodeResponse)
 }
