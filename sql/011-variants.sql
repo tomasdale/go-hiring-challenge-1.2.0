@@ -7,3 +7,6 @@ CREATE TABLE IF NOT EXISTS product_variants (
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE INDEX idx_product_variants_product_id
+ON product_variants(product_id);

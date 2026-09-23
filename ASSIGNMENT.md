@@ -16,48 +16,48 @@ Writing Idiomatic Go code is crucial, so we will focus on clarity and simplicity
      - ID (internal use only)
      - Code (human-readable unique identifier)
      - Name (human-readable name)
-   - There will be 3 categories: "Clothing", "Shoes", and "Accessories".
-     - _PROD001, PROD004, PROD007_ will belong to "Clothing".
-     - _PROD002, PROD006_ will belong to "Shoes".
-     - _PROD003, PROD005, PROD008_ will belong to "Accessories".
-   - Follow the pattern introduced for the migrations files, and the implementation of the gorm models.
+   - There will be 3 categories: "Clothing", "Shoes", and "Accessories". ok
+     - _PROD001, PROD004, PROD007_ will belong to "Clothing". ok
+     - _PROD002, PROD006_ will belong to "Shoes". ok
+     - _PROD003, PROD005, PROD008_ will belong to "Accessories". ok
+   - Follow the pattern introduced for the migrations files, and the implementation of the gorm models. ok
 
-3. Update the catalog handler and relevant repositories to include the product category in the response.
+3. Update the catalog handler and relevant repositories to include the product category in the response. ok
 
-4. Update the catalog handler and relevant repositories to support offset pagination.
+4. Update the catalog handler and relevant repositories to support offset pagination. ok
 
-   - The endpoint should accept query parameters `offset` and `limit`.
-   - If `offset` is not provided, default to 0.
-   - If `limit` is not provided, default to 10. Maximum limit should be 100. Minimum limit should be 1.
+   - The endpoint should accept query parameters `offset` and `limit`. ok
+   - If `offset` is not provided, default to 0. ok 
+   - If `limit` is not provided, default to 10. Maximum limit should be 100. Minimum limit should be 1. ok
    - The response should include the total number of products available.
 
 5. Update the catalog handler to support filtering products by:
 
-   - Category
-   - Price Less Than
+   - Category ok
+   - Price Less Than ok
 
 ### Product details endpoint
 
-1. Implement the product details endpoint at `/catalog/:code`.
+1. Implement the product details endpoint at `/catalog/:code`. ok
 
-- This endpoint should return the product details including its variants. Do note that variants without specific price should inherit the price from the product.
-- The product details should include the product's category.
-- Provide unit tests for this endpoint.
+- This endpoint should return the product details including its variants. Do note that variants without specific price should inherit the price from the product. ok
+- The product details should include the product's category. ok
+- Provide unit tests for this endpoint. --
 
 ### Categories endpoint
 
-1. Implement the categories endpoint at `/categories`.
+1. Implement the categories endpoint at `/categories`.  ok
 
 - This endpoint should return a list of all categories.
 - Provide unit tests for this endpoint.
 
-2. Implement an endpoint to create new categories at `/categories`.
+2. Implement an endpoint to create new categories at `/categories`. ok
 
 - This endpoint should accept a JSON body with the category details from the category model and create a new entry in the DB.
 - Provide unit tests for this endpoint.
 
 ### Testing
 
-1. Provide unit tests for `app/catalog/handler.go`. Make sure to cover the new features implemented in the catalog endpoint.
+1. Provide unit tests for `app/catalog/handler.go`. Make sure to cover the new features implemented in the catalog endpoint. ok
 
-2. Implement the functions in `app/api/response.go` to satisfy the provided unit tests and refactor all handlers to use these functions where appropriate.
+2. Implement the functions in `app/api/response.go` to satisfy the provided unit tests and refactor all handlers to use these functions where appropriate. ok

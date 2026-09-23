@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func New(user, password, dbname, port string) (db *gorm.DB, close func() error) {
+func NewConnection(user, password, dbname, port string) (db *gorm.DB, close func() error) {
 	dsn := fmt.Sprintf("postgres://%s:%s@localhost:%s/%s?sslmode=disable", user, password, port, dbname)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})

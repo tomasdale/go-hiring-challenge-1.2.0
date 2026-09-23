@@ -1,0 +1,164 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: GoChallenge
+meta:
+  id: wrk_7e92a61193344747a2f631226dd3cf62
+  created: 1789681490659
+  modified: 1789681490659
+  description: ""
+collection:
+  - name: Products
+    meta:
+      id: fld_3e2d042fb95c466a84a9f871420fe7b2
+      created: 1789681501713
+      modified: 1790038764017
+      sortKey: -1789681501713
+      description: ""
+    children:
+      - url: http://localhost:8484/catalog
+        name: List
+        meta:
+          id: req_0dc5cbdbaf0344a187afa35b510f3636
+          created: 1789681589821
+          modified: 1790040924042
+          isPrivate: false
+          description: ""
+          sortKey: -1789681586263
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8484/catalog
+        name: Method Not Allowed
+        meta:
+          id: req_392e22d33b1d41a5adc97618f0ee719a
+          created: 1789681628874
+          modified: 1790038771425
+          isPrivate: false
+          description: ""
+          sortKey: -1789833289058
+        method: POST
+        body:
+          mimeType: application/json
+          text: "{}"
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8484/catalog/PROD-NOT-FOUND
+        name: Not Found
+        meta:
+          id: req_2a1408e7164c47d6993bb8ec6b071d5f
+          created: 1789681638897
+          modified: 1790040749270
+          isPrivate: false
+          description: ""
+          sortKey: -1789833288958
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8484/catalog/PROD001
+        name: Details
+        meta:
+          id: req_331692038b1b4b60ae67eaf3b5079ad2
+          created: 1789833303968
+          modified: 1790038918483
+          isPrivate: false
+          description: ""
+          sortKey: -1789833288858
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Categories
+    meta:
+      id: fld_fe888e48e76e4e949104edb33c4b9bae
+      created: 1790038760757
+      modified: 1790038760757
+      sortKey: -1790038760757
+      description: ""
+    children:
+      - url: http://localhost:8484/categories
+        name: Create
+        meta:
+          id: req_352fc00d449244f5844bc31f2e6cb9f5
+          created: 1790038927331
+          modified: 1790168800065
+          isPrivate: false
+          description: ""
+          sortKey: -1790038927331
+        method: POST
+        body:
+          mimeType: application/json
+          text: '{"code":"CAT006","name":"Sports"}'
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8484/categories
+        name: List
+        meta:
+          id: req_2af0418732224fc28a734138da651349
+          created: 1790038991152
+          modified: 1790039809858
+          isPrivate: false
+          description: ""
+          sortKey: -1790038991152
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_204a29c13e3478473fce9eefcaf112fe0b48a8ad
+    created: 1789681490661
+    modified: 1789681490661
+environments:
+  name: Base Environment
+  meta:
+    id: env_204a29c13e3478473fce9eefcaf112fe0b48a8ad
+    created: 1789681490660
+    modified: 1789681490660
+    isPrivate: false
