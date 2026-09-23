@@ -42,8 +42,13 @@ func (r *CategoriesRepository) Details(ctx context.Context, query input.QueryDat
 	return category, nil
 }
 
-func (r *CategoriesRepository) Create(ctx context.Context, category models.Category) error {
-	if err := r.db.WithContext(ctx).Create(&category).Error; err != nil {
+func (r *CategoriesRepository) Create(ctx context.Context, category input.Category) error {
+	categoryModel := models.Category{
+		Code: category.Code,
+		Name: category.Name,
+	}
+
+	if err := r.db.WithContext(ctx).Create(&categoryModel).Error; err != nil {
 		var postgresError *pgconn.PgError
 		if errors.As(err, &postgresError) && postgresError.Code == "23505" {
 			return custom_error.ErrCategoryCodeAlreadyExists

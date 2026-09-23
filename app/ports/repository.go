@@ -15,5 +15,5 @@ type ProductsRepository interface {
 type CategoriesRepository interface {
 	List(ctx context.Context, query input.QueryData) ([]models.Category, error)
 	Details(ctx context.Context, query input.QueryData) (models.Category, error)
-	Create(ctx context.Context, category models.Category) error
+	Create(ctx context.Context, category input.Category) error
 }

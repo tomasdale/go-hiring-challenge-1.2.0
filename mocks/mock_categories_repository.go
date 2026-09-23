@@ -28,7 +28,7 @@ func (m *CategoriesRepository) Details(ctx context.Context, query input.QueryDat
 	return args.Get(0).(models.Category), args.Error(1)
 }
 
-func (m *CategoriesRepository) Create(ctx context.Context, category models.Category) error {
+func (m *CategoriesRepository) Create(ctx context.Context, category input.Category) error {
 	args := m.Called(ctx, category)
 	return args.Error(0)
 }

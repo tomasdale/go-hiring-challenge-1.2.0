@@ -8,7 +8,6 @@ import (
 	"github.com/mytheresa/go-hiring-challenge/app/ports/custom_error"
 	"github.com/mytheresa/go-hiring-challenge/app/ports/input"
 	"github.com/mytheresa/go-hiring-challenge/app/ports/output"
-	"github.com/mytheresa/go-hiring-challenge/models"
 	"gorm.io/gorm"
 )
 
@@ -46,16 +45,11 @@ func (c *CategoriesUseCase) Details(ctx context.Context, query input.QueryData) 
 }
 
 func (c *CategoriesUseCase) Create(ctx context.Context, category input.Category) error {
-	categoryModel := models.Category{
-		Code: category.Code,
-		Name: category.Name,
-	}
-
-	if categoryModel.Code == "" || categoryModel.Name == "" {
+	if category.Code == "" || category.Name == "" {
 		return custom_error.ErrCategoryInputInvalid
 	}
 
-	err := c.repo.Create(ctx, categoryModel)
+	err := c.repo.Create(ctx, category)
 	if err != nil {
 		if errors.Is(err, custom_error.ErrCategoryCodeAlreadyExists) {
 			return custom_error.ErrCategoryCodeAlreadyExists
