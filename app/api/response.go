@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/mytheresa/go-hiring-challenge/app/ports/custom_error"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/custom_error"
 )
 
 type Error struct {

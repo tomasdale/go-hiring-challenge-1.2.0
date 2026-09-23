@@ -5,8 +5,8 @@ import (
 	"errors"
 
 	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/mytheresa/go-hiring-challenge/app/ports/custom_error"
-	"github.com/mytheresa/go-hiring-challenge/app/ports/input"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/custom_error"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/input"
 	"github.com/mytheresa/go-hiring-challenge/models"
 	"gorm.io/gorm"
 )

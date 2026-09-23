@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/mytheresa/go-hiring-challenge/app/ports/input"
-	"github.com/mytheresa/go-hiring-challenge/app/ports/output"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/input"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/output"
 	"github.com/mytheresa/go-hiring-challenge/app/usecase"
 	"github.com/mytheresa/go-hiring-challenge/infrastructure/logger"
 	"github.com/mytheresa/go-hiring-challenge/mocks"

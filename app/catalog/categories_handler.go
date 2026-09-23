@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/mytheresa/go-hiring-challenge/app/api"
-	"github.com/mytheresa/go-hiring-challenge/app/ports/input"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/input"
 	"github.com/mytheresa/go-hiring-challenge/app/usecase"
 	"github.com/mytheresa/go-hiring-challenge/infrastructure/logger"
 )

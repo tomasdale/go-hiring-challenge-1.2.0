@@ -1,4 +1,4 @@
-package ports
+package domain
 
 type Error interface {
 	Code() int

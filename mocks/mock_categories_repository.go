@@ -3,7 +3,7 @@ package mocks
 import (
 	"context"
 
-	"github.com/mytheresa/go-hiring-challenge/app/ports/input"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/input"
 	"github.com/mytheresa/go-hiring-challenge/models"
 	"github.com/stretchr/testify/mock"
 )

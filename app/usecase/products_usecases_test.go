@@ -5,9 +5,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/mytheresa/go-hiring-challenge/app/ports/custom_error"
-	"github.com/mytheresa/go-hiring-challenge/app/ports/input"
-	"github.com/mytheresa/go-hiring-challenge/app/ports/output"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/custom_error"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/input"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/output"
 	"github.com/mytheresa/go-hiring-challenge/mocks"
 	"github.com/mytheresa/go-hiring-challenge/models"
 	"github.com/shopspring/decimal"

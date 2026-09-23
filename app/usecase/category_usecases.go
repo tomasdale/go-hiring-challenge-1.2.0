@@ -4,19 +4,19 @@ import (
 	"context"
 	"errors"
 
-	"github.com/mytheresa/go-hiring-challenge/app/ports"
-	"github.com/mytheresa/go-hiring-challenge/app/ports/custom_error"
-	"github.com/mytheresa/go-hiring-challenge/app/ports/input"
-	"github.com/mytheresa/go-hiring-challenge/app/ports/output"
+	"github.com/mytheresa/go-hiring-challenge/app/domain"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/custom_error"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/input"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/output"
 	"gorm.io/gorm"
 )
 
 type CategoriesUseCase struct {
-	repo      ports.CategoriesRepository
-	presenter ports.CategoriesPresenter
+	repo      domain.CategoriesRepository
+	presenter domain.CategoriesPresenter
 }
 
-func NewCategoriesUseCase(repo ports.CategoriesRepository, presenter ports.CategoriesPresenter) *CategoriesUseCase {
+func NewCategoriesUseCase(repo domain.CategoriesRepository, presenter domain.CategoriesPresenter) *CategoriesUseCase {
 	return &CategoriesUseCase{repo: repo, presenter: presenter}
 }
 

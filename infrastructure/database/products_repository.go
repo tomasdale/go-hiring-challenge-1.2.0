@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 
-	"github.com/mytheresa/go-hiring-challenge/app/ports/input"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/input"
 	"github.com/mytheresa/go-hiring-challenge/models"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"

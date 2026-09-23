@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/mytheresa/go-hiring-challenge/app/ports/output"
+	"github.com/mytheresa/go-hiring-challenge/app/domain/output"
 	"github.com/mytheresa/go-hiring-challenge/models"
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
