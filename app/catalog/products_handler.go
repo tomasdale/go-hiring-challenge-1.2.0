@@ -19,11 +19,11 @@ var (
 )
 
 type CatalogHandler struct {
-	products *usecase.GetProductsUseCase
+	products *usecase.ProductsUseCase
 	logger   logger.Logger
 }
 
-func NewCatalogHandler(products *usecase.GetProductsUseCase, l logger.Logger) *CatalogHandler {
+func NewCatalogHandler(products *usecase.ProductsUseCase, l logger.Logger) *CatalogHandler {
 	return &CatalogHandler{
 		products: products,
 		logger:   l,

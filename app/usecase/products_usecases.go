@@ -11,19 +11,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type GetProductsUseCase struct {
+type ProductsUseCase struct {
 	repo      ports.ProductsRepository
 	presenter ports.ProductsPresenter
 }
 
-func NewProductsUseCase(repo ports.ProductsRepository, presenter ports.ProductsPresenter) *GetProductsUseCase {
-	return &GetProductsUseCase{
+func NewProductsUseCase(repo ports.ProductsRepository, presenter ports.ProductsPresenter) *ProductsUseCase {
+	return &ProductsUseCase{
 		repo:      repo,
 		presenter: presenter,
 	}
 }
 
-func (uc *GetProductsUseCase) List(ctx context.Context, query input.QueryData) (output.GetAllProductsResponse, error) {
+func (uc *ProductsUseCase) List(ctx context.Context, query input.QueryData) (output.GetAllProductsResponse, error) {
 	if query.Limit > 100 || query.Limit < 1 {
 		return output.GetAllProductsResponse{}, custom_error.ErrInvalidProductLimit
 	}
@@ -36,7 +36,7 @@ func (uc *GetProductsUseCase) List(ctx context.Context, query input.QueryData) (
 	return uc.presenter.ProductListResponse(ctx, res), nil
 }
 
-func (uc *GetProductsUseCase) Details(ctx context.Context, query input.QueryData) (output.GetByProductCodeResponse, error) {
+func (uc *ProductsUseCase) Details(ctx context.Context, query input.QueryData) (output.GetByProductCodeResponse, error) {
 	res, err := uc.repo.Details(ctx, query)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
