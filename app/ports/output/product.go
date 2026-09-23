@@ -1,5 +1,13 @@
 package output
 
+type GetAllProductsResponse struct {
+	Products []Product `json:"products"`
+}
+
+type GetByProductCodeResponse struct {
+	Product Product `json:"product"`
+}
+
 type ProductSummary struct {
 	Code  string  `json:"code"`
 	Price float64 `json:"price"`

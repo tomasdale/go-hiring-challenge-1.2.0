@@ -51,12 +51,10 @@ func (c *CategoriesUseCase) Create(ctx context.Context, category input.Category)
 		Name: category.Name,
 	}
 
-	// Validate the input category data
 	if categoryModel.Code == "" || categoryModel.Name == "" {
 		return custom_error.ErrCategoryInputInvalid
 	}
 
-	// Save the updated category back to the repository
 	err := c.repo.Create(ctx, categoryModel)
 	if err != nil {
 		if errors.Is(err, custom_error.ErrCategoryCodeAlreadyExists) {
